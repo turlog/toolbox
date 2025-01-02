@@ -9,7 +9,16 @@ packages = [{include = "turlog", from="src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+click = "^8.1.8"
+pydantic = "^2.10.4"
 
+
+[tool.poetry.group.backup.dependencies]
+rclone-python = {version = "^0.1.18", extras = ["backup"]}
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
 
 [build-system]
 requires = ["poetry-core"]
