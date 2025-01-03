@@ -11,6 +11,7 @@ packages = [{include = "turlog", from="src"}]
 python = "^3.12"
 click = "^8.1.8"
 pydantic = "^2.10.4"
+paho-mqtt = "^2.1.0"
 
 
 [tool.poetry.group.backup.dependencies]
