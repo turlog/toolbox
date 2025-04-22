@@ -22,7 +22,7 @@ class MQTTConnection(BaseModel):
 class RemoteConfiguration(BaseModel):
     mqtt: MQTTConnection
     actions: dict[str, str]
-    
+
     @classmethod
     def load(cls, fn):
         stream = sys.stdin if fn == "-" else open(fn)
@@ -33,7 +33,6 @@ class RemoteConfiguration(BaseModel):
 
 
 def action_handler(configuration):
-
     mqtt = Client(CallbackAPIVersion.VERSION1)
     mqtt.username_pw_set(configuration.mqtt.username, configuration.mqtt.password)
 
@@ -56,13 +55,12 @@ def action_handler(configuration):
             if action is not None:
                 print(f"ACTION: {action}")
                 if (action := configuration.actions.get(action)) is not None:
-                    if action.startswith('!'):
+                    if action.startswith("!"):
                         os.system(action[1:])
-                    
+
         raw = payload.get("RfRaw", {}).get("Data")
         if raw is not None:
             print(raw)
-
 
     def on_connect(client, userdata, flags, rc):
         print(userdata, flags, rc)
@@ -70,10 +68,8 @@ def action_handler(configuration):
         # client.publish("cmnd/rfbridge/rfraw", "166")
         print("CONNECTED")
 
-
     def on_disconnect(client, userdata, rc):
         print("DISCONNECTED")
-
 
     def on_log(client, userdata, level, buf):
         print("NOTICE: ", buf)
@@ -93,7 +89,6 @@ def action_handler(configuration):
     )
 
     mqtt.loop_forever()
-
 
 
 @click.group()
@@ -122,5 +117,5 @@ def action_handler_command(configuration):
     action_handler(configuration)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
