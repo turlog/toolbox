@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 from turlog.toolbox.backup import sync_to_cloud, SyncToCloudTasks, SyncToCloudTask
 
+
 @pytest.fixture
 def mock_rclone():
     with patch("turlog.toolbox.backup.rclone") as mock_rclone:
@@ -18,7 +19,7 @@ def configuration():
             SyncToCloudTask(
                 source=Path("/mock/source"),
                 filter=re.compile(r".*\.backup$"),
-                target="mock_target"
+                target="mock_target",
             )
         ]
     )
@@ -27,7 +28,9 @@ def configuration():
 def test_sync_to_cloud_rclone_not_installed(mock_rclone, configuration):
     mock_rclone.is_installed.return_value = False
 
-    with pytest.raises(UsageError, match="This command requires a configured rclone tool."):
+    with pytest.raises(
+        UsageError, match="This command requires a configured rclone tool."
+    ):
         sync_to_cloud(configuration)
 
 
@@ -54,5 +57,5 @@ def test_sync_to_cloud_success(mock_rclone, configuration):
         src_path=mock_path,
         dest_path="mock_target/subpath.backup",
         args=["--gcs-bucket-policy-only"],
-        show_progress=True
+        show_progress=True,
     )
