@@ -33,9 +33,10 @@ class SyncToCloudTasks(BaseModel):
 
 def check_version(yours, latest, beta):
     version = namedtuple("Version", ("ok", "yours", "required"))
-    yours_, required_ = map(lambda x: tuple(map(int, x.split("."))), (yours, latest))
+    yours_, latest_ = map(lambda x: tuple(map(int, x.split("."))), (yours, latest))
+    required_ = (latest_[0], latest_[1]-1, 0)
     return version(
-        yours_[:2] == required_[:2], yours, ".".join(map(str, (*required_[:2], 0)))
+        yours_ > required_, yours, ".".join(map(str, required_))
     )
 
 
